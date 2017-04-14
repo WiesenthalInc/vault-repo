@@ -1,14 +1,26 @@
-variable "aws_access_key_id" {}
-variable "aws_secret_access_key" {}
+# Get the latest official ubuntu 16.04 image ami
+data "aws_ami" "ubuntu_16_04" {
+  most_recent = true
 
-variable "aws_default_region" {
-  default = "eu-central-1"
+  filter {
+    name   = "name"
+    values = ["ubuntu/images/hvm-ssd/ubuntu-xenial-16.04-amd64-server-*"]
+  }
+
+  filter {
+    name   = "virtualization-type"
+    values = ["hvm"]
+  }
+
+  owners = ["099720109477"] # Canonical
 }
 
-# Configure the AWS provider
-provider "aws" {
-  access_key = "${var.aws_access_key_id}"
-  secret_key = "${var.aws_secret_access_key}"
-  region     = "${var.aws_default_region}"
-}
+resource "aws_instance" "vault" {
+  ami           = "${data.aws_ami.ubuntu_16_04.id}"
+  instance_type = "t2.miLcro"
 
+  tags {
+    Name = "vault test instance"
+    Provisioner = "terraform"
+  }
+}
