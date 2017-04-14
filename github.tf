@@ -1,11 +1,3 @@
-variable "github_token" {}
-
-# Configure the GitHub Provider
-provider "github" {
-  token        = "${var.github_token}"
-  organization = "WiesenthalInc"
-}
-
 # Organize Github accounts
 
 # Add a users to the organization
